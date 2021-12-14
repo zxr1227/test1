@@ -1,0 +1,14 @@
+server:
+  servlet:
+    context-path: /udg
+  port: 8080
+
+spring:
+  datasource:
+    username: root
+    password: 997
+    url: jdbc:mysql://localhost:3306/zxr?useUnicode=true&characterEncoding=utf-8&useSSL=true&serverTimezone=UTC
+    driver-class-name: com.mysql.cj.jdbc.Driver
+mybatis:
+  configuration:
+    map-underscore-to-camel-case: true
