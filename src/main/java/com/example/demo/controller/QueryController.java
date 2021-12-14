@@ -27,13 +27,13 @@ public class QueryController {
     private FlushTableService flushTableService;
 
     @GetMapping("/category_tree")
-    public DataVO<TableMeta> query(Long tableId){
-        return queryService.getAllFirstCategory(tableId);
+    public DataVO<List<TableMeta>> query(Long tableId){
+        return new DataVO(queryService.getAllFirstCategory(tableId));
     }
 
     @GetMapping("/merge_category_tree")
     public DataVO<List<TableMetaOV>> flushTable(Long flushTableId){
-        return flushTableService.getFlushTable(flushTableId);
+        return new DataVO(flushTableService.getFlushTable(flushTableId));
     }
 
 }

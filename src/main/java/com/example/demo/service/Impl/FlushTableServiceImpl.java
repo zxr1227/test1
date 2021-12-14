@@ -5,12 +5,11 @@ import com.example.demo.ov.FirstCategoryOV;
 import com.example.demo.ov.SecondCategoryOV;
 import com.example.demo.ov.TableMetaOV;
 import com.example.demo.service.FlushTableService;
-import com.example.demo.util.DataVO;
+import org.hibernate.metamodel.internal.JpaStaticMetaModelPopulationSetting;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class FlushTableServiceImpl implements FlushTableService {
@@ -19,66 +18,42 @@ public class FlushTableServiceImpl implements FlushTableService {
     private FlushTableDao flushTableDao;
 
     @Override
-    public DataVO<List<TableMetaOV>> getFlushTable(Long flushTableId) {
-        List<TableMetaOV> metas = new ArrayList<>();
-        DataVO<List<TableMetaOV>> data = new DataVO<>();
-        for(TableMetaOV meta:flushTableDao.tableMeta()){
-            if(meta.getFlushTableId() == flushTableId){
-                metas.add(meta);
-            }
-        }
-        for(TableMetaOV meta:metas){
-            List<FirstCategoryOV> parents = getParent(meta.getId());
-            meta.setFirst_category(parents);
-        }
-        data.setData(metas);
-        return data;
-    }
-    //找一级类目的方法
-    private List<FirstCategoryOV> getParent(Long tableId){
-        List<FirstCategoryOV> parent = new ArrayList<>();
-        for(FirstCategoryOV firstCategory:flushTableDao.getFirstCategory()){
-            if(firstCategory.getTableId() == tableId){
-                       parent.add(firstCategory);
-               }
-            }
-        for(FirstCategoryOV firstCategory:parent){
-            List<SecondCategoryOV> children = getChild(firstCategory.getId());
-            firstCategory.setSecond_category(children);
-        }
-        for(int i = 0; i < parent.size(); i++) {
-            List<Long> list = new ArrayList<>();
-            list.add(parent.get(i).getId());
-            for (int j = i + 1; j < parent.size(); j++) {
-                if (parent.get(i).getName().equals(parent.get(j).getName())) {
-                    list.add(parent.get(j).getId());
-                    parent.remove(j);
+    public TableMetaOV getFlushTable(Long flushTableId) {
+        TableMetaOV metas = new TableMetaOV();
+        List<FirstCategoryOV> firstCategoryOVS = flushTableDao.getFirstCategory(flushTableId);
+        List<SecondCategoryOV> secondCategoryOVS = flushTableDao.getSecondCategory(flushTableId);
+        for(int i = 0; i < secondCategoryOVS.size(); i++){
+            List<Long> ids = new ArrayList<>();
+            ids.add(secondCategoryOVS.get(i).getId());
+            for(int j = i+1; j < secondCategoryOVS.size(); j++){
+                if (secondCategoryOVS.get(i).getName().equals(secondCategoryOVS.get(j).getName())) {
+                    ids.add(secondCategoryOVS.get(j).getId());
+                    secondCategoryOVS.remove(j);
                 }
             }
-            parent.get(i).setIds(list);
+            secondCategoryOVS.get(i).setIds(ids);
         }
-        return parent;
-    }
-    //找二级类目的方法
-    private List<SecondCategoryOV> getChild(Long id){
-        List<SecondCategoryOV> children = new ArrayList<>();
-
-        for(SecondCategoryOV secondCategory:flushTableDao.getAllSecondCategory()){
-            if(id == secondCategory.getFirstCategoryId()){
-                children.add(secondCategory);
-            }
-        }
-        for(int i = 0; i < children.size(); i++){
-            List<Long> list = new ArrayList<>();
-            list.add(children.get(i).getId());
-            for(int j = i+1; j < children.size(); j++){
-                if(children.get(i).getName().equals(children.get(j).getName())){
-                    list.add(children.get(j).getId());
-                    children.remove(j);
+        for(int i = 0; i < firstCategoryOVS.size(); i++){
+            List<Long> ids = new ArrayList<>();
+            ids.add(firstCategoryOVS.get(i).getId());
+            for(int j = i+1; j < firstCategoryOVS.size(); j++){
+                if (firstCategoryOVS.get(i).getName().equals(firstCategoryOVS.get(j).getName())) {
+                    ids.add(firstCategoryOVS.get(j).getId());
+                    firstCategoryOVS.remove(j);
                 }
             }
-            children.get(i).setIds(list);
+            firstCategoryOVS.get(i).setIds(ids);
         }
-        return children;
+        for(int i = 0; i < firstCategoryOVS.size(); i++){
+            List<SecondCategoryOV> list = new ArrayList<>();
+            for(int j = 0; j < secondCategoryOVS.size(); j++){
+                if(firstCategoryOVS.get(i).getId() == secondCategoryOVS.get(j).getFirstCategoryId()){
+                    list.add(secondCategoryOVS.get(j));
+                }
+            }
+            firstCategoryOVS.get(i).setSecond_category(list);
+        }
+        metas.setFirst_category(firstCategoryOVS);
+        return metas;
     }
 }
