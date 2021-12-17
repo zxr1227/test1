@@ -6,6 +6,6 @@ import java.util.List;
 
 public interface QueryService {
 
-    List<TableMeta> getAllFirstCategory(Long tableId);
+    TableMeta getAllFirstCategory(Long tableId);
 
 }

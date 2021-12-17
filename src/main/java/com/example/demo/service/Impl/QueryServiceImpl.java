@@ -17,9 +17,9 @@ public class QueryServiceImpl implements QueryService {
     private QueryDao queryDao;
 
     @Override
-    public List<TableMeta> getAllFirstCategory(Long tableId) {
-        List<TableMeta> metas = queryDao.selectById(tableId);
-        metas.get(0).setFirst_category(getParent(tableId));
+    public TableMeta getAllFirstCategory(Long tableId) {
+        TableMeta metas = new TableMeta();
+        metas.setFirst_category(getParent(tableId));
        return metas;
     }
     private List<FirstCategory> getParent(Long tableId){
