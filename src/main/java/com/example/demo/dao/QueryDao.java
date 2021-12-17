@@ -17,6 +17,4 @@ public interface QueryDao {
     @Select("select id,name from second_category where first_category_id = #{firstCategoryId}")
     List<SecondCategory> selectByFid(Long firstCategoryId);
 
-    @Select("select id from table_meta where id = #{id}")
-    List<TableMeta> selectById(Long id);
 }
