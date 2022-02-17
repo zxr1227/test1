@@ -1,55 +1,20 @@
 package com.example.demo.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.baomidou.mybatisplus.annotation.TableName;
+import com.deidara.dynamicds.actable.annotation.Column;
 import lombok.Data;
 
-import javax.persistence.*;
-import java.util.List;
-
 @Data
+@TableName
 public class FirstCategory {
 
-    @JsonIgnore
-    @Column(name = "tableId")
-    private long tableId;
-
-    @Column(name = "id")
-    private long id;
-
-    @Column(name = "name")
+    @Column(comment = "一级分类id")
+    private Long id;
+    @Column(comment = "一级分类名称")
     private String name;
+    @Column(comment = "排序号")
+    private Integer sortNum;
+    @Column(comment = "表id")
+    private Long tableId;
 
-    private List<SecondCategory> second_category;
-
-    public List<SecondCategory> getSecond_category() {
-        return second_category;
-    }
-
-    public void setSecond_category(List<SecondCategory> second_category) {
-        this.second_category = second_category;
-    }
-
-    public long getTableId() {
-        return tableId;
-    }
-
-    public void setTableId(long tableId) {
-        this.tableId = tableId;
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
 }

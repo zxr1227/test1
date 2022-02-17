@@ -1,11 +1,11 @@
 package com.example.demo.service;
 
-import com.example.demo.domain.TableMeta;
+import com.deidara.hutoolplus.Dict;
 
 import java.util.List;
 
-public interface QueryService {
+public interface QueryService  {
 
-    TableMeta getAllFirstCategory(Long tableId);
+    Dict getAllFirstCategory(Long tableId);
 
 }
