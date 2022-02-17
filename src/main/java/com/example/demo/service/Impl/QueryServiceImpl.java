@@ -30,6 +30,7 @@ public class QueryServiceImpl implements QueryService {
         }).collect(Collectors.toList());
         String ax = null;
         int i = 0;
+        String xr= null;
         return Dict.create().set("first_category",firstCategoryDict);
     }
 }
