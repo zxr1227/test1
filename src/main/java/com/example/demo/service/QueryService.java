@@ -8,4 +8,5 @@ public interface QueryService {
 
     TableMeta getAllFirstCategory(Long tableId);
 
+    void getXml();
 }

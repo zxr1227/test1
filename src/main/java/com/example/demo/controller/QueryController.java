@@ -36,4 +36,10 @@ public class QueryController {
         return new DataVO(flushTableService.getFlushTable(flushTableId));
     }
 
+    @GetMapping("/xml")
+    public DataVO getXml(){
+        queryService.getXml();
+        return new DataVO();
+    }
+
 }
